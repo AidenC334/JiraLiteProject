@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JiraLite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac97dfa522e360162f20d7275d9d277e61795e0e")]
 [assembly: System.Reflection.AssemblyProductAttribute("JiraLite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JiraLite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
