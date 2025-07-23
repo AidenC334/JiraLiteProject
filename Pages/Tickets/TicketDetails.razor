@@ -1,0 +1,131 @@
+﻿@page "/tickets/{TicketId:int}"
+@inject BugTracker.Services.ITicketService TicketService
+@inject NavigationManager Navigation
+
+<h3>Ticket Details</h3>
+
+@if (ticket == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="mb-3">
+        <strong>Title:</strong> @ticket.Title
+    </div>
+    <div class="mb-3">
+        <strong>Description:</strong>
+        <p>@ticket.Description</p>
+    </div>
+    <div class="mb-3">
+        <strong>Project:</strong> @ticket.Project?.Name
+    </div>
+    <div class="mb-3">
+        <strong>Priority:</strong> @ticket.Priority
+    </div>
+    <div class="mb-3">
+        <strong>Status:</strong> @ticket.Status
+    </div>
+    <div class="mb-3">
+        <strong>Assigned To:</strong> @(ticket.AssignedUser?.UserName ?? "Unassigned")
+    </div>
+    <div class="mb-3">
+        <strong>Created At:</strong> @ticket.CreatedAt.ToLocalTime().ToString("g")
+    </div>
+
+    <button class="btn btn-primary me-2" @onclick="EditTicket">Edit Ticket</button>
+    <button class="btn btn-secondary" @onclick="GoBack">Back to Project</button>
+
+    <hr />
+
+    <h4>Comments</h4>
+
+    @if (ticket.Comments == null || !ticket.Comments.Any())
+    {
+        <p>No comments yet.</p>
+    }
+    else
+    {
+        <ul class="list-group mb-3">
+            @foreach (var comment in ticket.Comments.OrderByDescending(c => c.CreatedAt))
+            {
+                <li class="list-group-item">
+                    <strong>@comment.Author?.UserName</strong> 
+                    <small class="text-muted">(@comment.CreatedAt.ToLocalTime().ToString("g"))</small>
+                    <p>@comment.Content</p>
+                </li>
+            }
+        </ul>
+    }
+
+    <EditForm Model="newComment" OnValidSubmit="AddComment">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Add Comment</label>
+            <InputTextArea id="content" class="form-control" @bind-value="newComment.Content" rows="3" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Add Comment</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int TicketId { get; set; }
+
+    private BugTracker.Models.Ticket? ticket;
+    private BugTracker.Models.Comment newComment = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ticket = await TicketService.GetByIdAsync(TicketId);
+
+        if (ticket == null)
+        {
+            Navigation.NavigateTo("/projects");
+            return;
+        }
+
+        if (ticket.Comments == null)
+            ticket.Comments = new List<BugTracker.Models.Comment>();
+
+        // Initialize new comment's ticket ref
+        newComment.TicketId = TicketId;
+        // For simplicity, assign a dummy author or wire up authentication later
+        newComment.AuthorId = "some-user-id"; // TODO: replace with logged-in user id
+    }
+
+    private void EditTicket()
+    {
+        Navigation.NavigateTo($"/tickets/edit/{TicketId}");
+    }
+
+    private void GoBack()
+    {
+        if (ticket?.ProjectId != null)
+        {
+            Navigation.NavigateTo($"/projects/{ticket.ProjectId}");
+        }
+        else
+        {
+            Navigation.NavigateTo("/projects");
+        }
+    }
+
+    private async Task AddComment()
+    {
+        if (string.IsNullOrWhiteSpace(newComment.Content))
+            return;
+
+        await TicketService.AddCommentAsync(newComment);
+
+        // Reload ticket to refresh comments
+        ticket = await TicketService.GetByIdAsync(TicketId);
+
+        newComment.Content = string.Empty;
+
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,7 @@
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\JiraLite.csproj.AssemblyReference.cache
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\JiraLite.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\JiraLite.AssemblyInfoInputs.cache
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\JiraLite.AssemblyInfo.cs
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\JiraLite.csproj.CoreCompileInputs.cache
+C:\Users\aiden\projects\BugTracker\JiraLite\JiraLite\obj\Debug\net8.0\JiraLite.MvcApplicationPartsAssemblyInfo.cache
